@@ -10,8 +10,6 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
     try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
         req.body.loggedUser = decoded;
-        req.params.user_id = decoded.id;
-        req.params.role = decoded.role;
         req.params.email = decoded.email;
         next();
     } catch (error) {

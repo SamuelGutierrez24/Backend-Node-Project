@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 
 import { router } from './routes/posts';
 import { router as user } from './routes/user';
+import { router as comment } from './routes/comment';
+import { router as reaction } from './routes/reaction';
+
 import { db } from './config/db';
 
 dotenv.config();
@@ -20,6 +23,8 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/posts', router);
 app.use('/api/users', user);
+app.use('/api/comments', comment);
+app.use('/api/reactions', reaction);
 
 db.then(() => {
     app.listen(port, () => {

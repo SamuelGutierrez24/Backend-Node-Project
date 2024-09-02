@@ -70,28 +70,36 @@ class UserService {
         }
     }
 
-    public async update(id: string, userInput: UserInput): Promise<UserDocument | null> {
+    public async update(email: string, userInput: UserInput): Promise<UserDocument | null> {
         try {
-            const  user: UserDocument | null = await  UserModel.findOneAndUpdate({_id: id}, userInput, {returnOriginal: false});
-            return user;            
+
+            userInput.password = await bcrypt.hash(userInput.password, 10);
+            
+            const user: UserDocument | null = await UserModel.findOneAndUpdate({ email: email }, userInput, { new: true });
+            return user;
         } catch (error) {
-           throw error; 
+            throw error;
         }
     }
+    
 
-    public async delete(id: string): Promise<UserDocument | null> {
+    public async delete(email: string): Promise<UserDocument | null> {
         try {
-            const  user: UserDocument | null = await  UserModel.findByIdAndDelete(id);
-            return user;            
+            const userExists: UserDocument | null = await this.findByEmail(email);
+            if (!userExists)
+                throw new UserExistsError("User doesn’t exist");
+    
+            await UserModel.deleteOne({ email: email });
+            return userExists; 
         } catch (error) {
-           throw error; 
+            throw error;
         }
     }
 
     public  generateToken(user: UserDocument): string {
         
         try{
-            return  jwt.sign({id: user._id, email: user.email, name:user.name}, process.env.JWT_SECRET || "secret", {expiresIn: "2m"});
+            return  jwt.sign({id: user._id, email: user.email, name:user.name, role: user.role}, process.env.JWT_SECRET || "secret", {expiresIn: "50m"});
         }catch(error) {
             throw error;
         }

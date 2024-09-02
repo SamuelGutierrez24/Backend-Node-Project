@@ -4,18 +4,23 @@ import validateSchema from "../middlewares/validateSchema";
 import userSchema from "../schemas/user.schema";
 import loginSchema from "../schemas/login.schema";
 import auth from "../middlewares/auth";
+import auth2 from "../middlewares/auth.role";
+
+
+
 
 export const router = express.Router();
 
-router.post("/", validateSchema(userSchema), userController.create );
+router.post("/", auth, auth2("0") ,validateSchema(userSchema), userController.create);
+
 router.post("/login", validateSchema(loginSchema), userController.login );
 
-router.get("/", userController.getAll);
+router.get("/", auth, userController.getAll);
 
-router.get("/profile", auth, userController.get);
+router.get("/:id", auth, auth2("0"), userController.get);
 
-router.get("/:id", userController.get);
+router.put("/:email", auth, auth2("0"), userController.update);
 
-router.put("/:id", userController.update);
+router.delete("/", auth, auth2("0"), userController.delete);
 
-router.delete("/:id", userController.delete);
+

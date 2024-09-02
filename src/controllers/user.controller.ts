@@ -5,11 +5,13 @@ import UserExistsError from "../exceptions/UserExistsError";
 
 class userController {
 
+    /** 
+    *Descripción: Crea un nuevo usuario en la base de datos.
+    *Método: POST
+    *URL: /api/users
+    */ 
     public async create(req: Request, res: Response) {
         try {
-            // const userExists: UserDocument | null = await userService.findByEmail(req.body.email);
-            // if(userExists)
-            //      res.status(400).json({message: "User already exists" });
             const user: UserDocument = await userService.create(req.body as UserInput);
             res.status(201).json(user);            
         } catch (error) {
@@ -21,6 +23,13 @@ class userController {
         }
     }
 
+    /**
+     * Descripción: Permite loguear a un usuario y crear su jwt token.
+     *Método: POST
+     *URL: /api/users
+     * @param req 
+     * @param res 
+     */
     public async login(req: Request, res: Response) {
         try {
             const resObj = await userService.login(req.body);
@@ -33,7 +42,13 @@ class userController {
             res.status(500).json(error);
         }
     }
-
+    /**
+     * Descripción: Nos devuelve un usuario a travez de su id.
+     *Método: GET
+     *URL: /api/users
+     * @param req 
+     * @param res 
+     */
     public async get (req: Request, res: Response) {
         try {
             const user: UserDocument | null = await userService.findById(req.params.id); 
@@ -46,6 +61,13 @@ class userController {
             res.status(500).json(error);
         }
     }
+    /**
+     * Descripción: Nos devuelve la lista completa de todos los usuarios en la base de datos.
+     *Método: GET
+     *URL: /api/users
+     * @param req 
+     * @param res 
+     */
 
     public async getAll(req: Request, res: Response) {
         try {
@@ -56,31 +78,47 @@ class userController {
         }    
     }
 
+    /**
+     * Descripción: Edita un usuario ya creado.
+     *Método: PUT
+     *URL: /api/users
+     * @param req 
+     * @param res 
+     */
     public async update(req: Request, res: Response) {
         try {
-            const user: UserDocument | null = await userService.update(req.params.id, req.body as UserInput);
-            if (!user){
-                res.status(404).json({message: `User with id:${req.params.id} not found`});
+            const user: UserDocument | null = await userService.update(req.params.email, req.body as UserInput);
+            if (!user) {
+                res.status(404).json({ message: `User with email: ${req.params.email} not found` });
                 return;
-            }            
-            res.json(user);            
+            }
+            res.json(user);
         } catch (error) {
             res.status(500).json(error);
         }
     }
-
-    public async delete (req: Request, res: Response) {
+    
+    /**
+     * Descripción: Elimina un usuario de la base de datos.
+     *Método: DELETE
+     *URL: /api/users
+     * @param req 
+     * @param res 
+     */
+    public async delete(req: Request, res: Response) {
         try {
-            const user: UserDocument | null = await userService.delete(req.params.id);
-            if (!user){
-                res.status(404).json({message: `User with id:${req.params.id} not found`})
+            const user: UserDocument | null = await userService.delete(req.body.email);
+            if (!user) {
+                res.status(404).json({ message: `User with email: ${req.body.email} not found` });
                 return;
-            }            
-            res.json(user);          
+            }
+            res.json(user);
         } catch (error) {
             res.status(500).json(error);
-        }    
+        }
     }
+    
+    
 }
 
 export default new userController();
