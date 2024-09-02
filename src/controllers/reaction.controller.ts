@@ -4,7 +4,7 @@ import { ReactionDocument, ReactionInput } from "../models/reaction.model";
 
 class reactionController {
     /**
-     * Descripción: Crea una nueva reaación en la base de datos.
+     * Descripción: Crea una nueva reacción en la base de datos.
      *Método: POST
      *URL: /api/comments
      * @param req 

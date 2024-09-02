@@ -16,7 +16,7 @@ class commentController {
         try {
             const email = req.params.email;
             const text = req.body.text;
-            const commentInput: CommentInput = {text:text , email:email, responses:[], reactions:[]};
+            const commentInput: CommentInput = {text:text , email:email, commentId: "", responses:[], reactions:[]};
             const comment: CommentDocument = await commentService.create(commentInput);
             res.status(201).json(comment);            
         } catch (error) {
@@ -110,7 +110,7 @@ class commentController {
             const email = req.params.email;
             const text = req.body.text;
             const id = req.params.id;
-            const commentInput: CommentInput = { text: text, email: email, responses: [], reactions:[] };
+            const commentInput: CommentInput = { text: text, email: email, commentId:id, responses: [], reactions:[] };
             const comment: CommentDocument | null = await commentService.response(commentInput, id);
             
             if (!comment) {
