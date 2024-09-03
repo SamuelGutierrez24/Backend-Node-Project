@@ -71,10 +71,14 @@ class CommentService {
             if (commentExists.email !== email) {
                 throw new UserNotAuthorizedError("Not your comment");
             }
-            const responseExists: CommentDocument | null = await this.findById(commentExists.commentId)
-            if (responseExists) {
-                await CommentModel.updateOne({ _id: commentExists.commentId }, { $pull: { responses: id } });
+            if(commentExists.commentId){
+                const responseExists: CommentDocument | null = await this.findById(commentExists.commentId)
+                if (responseExists) {
+                    await CommentModel.updateOne({ _id: commentExists.commentId }, { $pull: { responses: id } });
+                }
             }
+            
+            console.log("sali")
             await this.deleteResponses(commentExists.responses);
     
             await CommentModel.deleteOne({ _id: id });

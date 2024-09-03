@@ -6,7 +6,7 @@ class reactionController {
     /**
      * Descripción: Crea una nueva reacción en la base de datos.
      *Método: POST
-     *URL: /api/comments
+     *URL: /api/reactions
      * @param req 
      * @param res 
      */
@@ -27,7 +27,7 @@ class reactionController {
     /**
      * Descripción: Nos devuelve una reaccion por ID.
      *Método: GET
-     *URL: /api/comment
+     *URL: /api/reactions
      * @param req 
      * @param res 
      */
@@ -46,7 +46,7 @@ class reactionController {
   /**
      * Descripción: Nos devuelve la lista de reacciones que hay en la base de datos.
      *Método: GET
-     *URL: /api/comment
+     *URL: /api/reactions
      * @param req 
      * @param res 
      */
@@ -61,7 +61,7 @@ class reactionController {
     /**
      * Descripción: Edita una reaccion a un comentario en la base de datos.
      *Método: PUT
-     *URL: /api/comment
+     *URL: /api/reactions
      * @param req 
      * @param res 
      */
@@ -81,7 +81,7 @@ class reactionController {
     /**
      * Descripción: Elimina una reaccion a un comentario de la base de datos.
      *Método: DELETE
-     *URL: /api/comments
+     *URL: /api/reactions
      * @param req 
      * @param res 
      */

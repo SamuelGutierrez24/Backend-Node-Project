@@ -16,9 +16,9 @@ class ReactionService {
             if (!base)
                 throw new UserExistsError("Comment doesn’t exist");
             else{
-                base.reactions.push(text)
-                base.save();
                 reaction = await ReactionModel.create(reactionInput)
+                base.reactions.push(reaction.id)
+                base.save();
             }
             return reaction;
         } catch (error) {
@@ -70,9 +70,8 @@ class ReactionService {
             if (reactionExists.email !== email) {
                 throw new UserNotAuthorizedError("Not your comment");
             }
-    
             await ReactionModel.deleteOne({ _id: id });
-    
+            await CommentModel.updateOne({_id:reactionExists.commentId}, { $pull: { reactions: id }})
             return reactionExists;
         } catch (error) {
             throw error;
