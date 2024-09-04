@@ -66,7 +66,15 @@ Para crear una respuesta de comentario, se debe hacer login con cualquier tipo d
 con un body que contiene el texto a responder. Se realiza el mismo procedimiento con las solicitudes PUT y DELETE anteriores. Es importante saber que en la estructura del proyecto las respuestas son esencialmente comentarios que responden a otros comentarios.
 
 Para reaccionar a un comentario, se debe hacer login con cualquier tipo de usuario y se accede a la ruta /api/reactions/[id-comentario-a-reaccionar], en la cual se realiza una solicitud
-POST con un body que contenga la reaccion a vincular con el comentario. Las posibles reacciones son las siguientes:
+POST con un body que contenga la reaccion a vincular con el comentario. Las funcionalidades de actualizar y eliminar aplican con la misma lógica de los comentarios.
+
+```
+{
+    "text" : "me_gusta"
+}
+```
+
+Las posibles reacciones son las siguientes:
 
 ```
 MeGusta = "me_gusta",
@@ -76,4 +84,6 @@ MeSorprende = "me_sorprende",
 MeEntristece = "me_entristece",
 MeEnoja = "me_enoja"
 ```
+
+
 
