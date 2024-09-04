@@ -12,7 +12,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
         req.body.loggedUser = decoded;
         req.params.user_id = decoded.id;
         req.params.role = decoded.role;
-        req.params.email = decoded.email;
+        req.params.user_email = decoded.email;
         next();
     } catch (error) {
         if (error instanceof TokenExpiredError){
