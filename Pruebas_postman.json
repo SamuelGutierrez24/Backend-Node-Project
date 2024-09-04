@@ -1,0 +1,576 @@
+{
+	"info": {
+		"_postman_id": "ec858da5-cdab-4661-8632-b33d7cc541eb",
+		"name": "Taller node",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37356844"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"let token = jsonData.token;\r",
+									"pm.collectionVariables.set(\"token\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"password\": \"adminpass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/users/login",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show_users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/users",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"let email = jsonData.email;\r",
+									"pm.collectionVariables.set(\"email\", email);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test\",\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"testtest\",\r\n    \"role\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/users",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update_user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"modificado\",\r\n    \"email\": \"modificado@test.com\",\r\n    \"password\": \"modificado\",\r\n    \"role\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/users/{{email}}",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{email}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"modificado@test.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/users/",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Es necesario hacer login para poder realizar la mayoria de acciones, para crear, modificar y eliminar usuarios, se debe tener el rol de superadmin. Los usuarios normales solo tienen permitido ver la lista de usuarios.\n\nPara que funcione el login, se usa una variable que guarda el token de autenticacion y esta se usa para verificar que tipo de usuario esta realizando las acciones."
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Show_comments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/comments/",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"let cid = jsonData._id;\r",
+									"pm.collectionVariables.set(\"cid\", cid);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Esto es un comentario test.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/comments/",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit_comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Esto es una modificacion.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/comments/{{cid}}",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{cid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_response",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Esto es una respuesta.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/comments/{{cid}}",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{cid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/comments/{{cid}}",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{cid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Los comentarios pueden ser creados, editados, borrados y respondidos. Las opciones de editar y borrar son exclusivas de la persona que realiza el comentario, mientras que cualquier persona puede responderlo.\n\nAqui se usa el token de autenticacion para verificar si la persona que edita o borra el comentario es efectivamente la que lo creo."
+		},
+		{
+			"name": "Reactions",
+			"item": [
+				{
+					"name": "Create_reaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"let rid = jsonData._id;\r",
+									"pm.collectionVariables.set(\"rid\", rid);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"me_gusta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/reactions/66d7b42326019a164d2b3b5d",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"reactions",
+								"66d7b42326019a164d2b3b5d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_reaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://backend-node-project-production.up.railway.app/api/reactions/{{rid}}",
+							"protocol": "https",
+							"host": [
+								"backend-node-project-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"reactions",
+								"{{rid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Se pueden realizar reacciones a comentarios, solo se pueden crear y eliminar, esta solo por la persona que reacciona.\n\nSe usa el token de autenticacion para verificar si la persona que esta trantando de borrar la reaccion efectivamente es la que la creó."
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "uid",
+			"value": ""
+		},
+		{
+			"key": "cid",
+			"value": ""
+		},
+		{
+			"key": "rid",
+			"value": ""
+		}
+	]
+}
