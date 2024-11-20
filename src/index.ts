@@ -32,9 +32,9 @@ app.use('/api/reactions', reaction);
 const apolloServer  =  new ApolloServer({typeDefs, resolvers})
 
 db.then(() => {
-    app.listen(port, () => {
+    /*app.listen(port, () => {
         console.log(`Server is running  on port ${port}`);
-    });
+    });*/
     apolloServer.listen().then(({ url }) => {
         console.log(`Server ready at ${url}`);
     })
