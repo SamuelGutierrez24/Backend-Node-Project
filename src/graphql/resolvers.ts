@@ -2,7 +2,7 @@ import userController from "../controllers/user.controller";
 import postController from "../controllers/post.controller";
 import reactionController from "../controllers/reaction.controller";
 import commentController from "../controllers/comment.controller";
-import { UserInput } from "../models/user.model";
+import { UserDocument, UserInput } from "../models/user.model";
 
 export const resolvers = {
   Query: {
@@ -44,12 +44,12 @@ export const resolvers = {
     login: async (_: any, { input }: { input: { name: string; email: string; password: string; role: string } }) => {
         return await userController.login(input);
     },
-    updateUser: async (_: any, args: { email: string; input: any }) => {
-      return await userController.update({ params: { email: args.email }, body: args.input } as any, {} as any);
+    updateUser: async ( _: any,{ email, input }: { email: string; input: UserInput }) => {
+        return await userController.update(email, input);
     },
     deleteUser: async (_: any, { email }: { email: string }) => {
-        return await userController.delete(email);
-    },
+            return await userController.delete(email);
+        },
     // Post mutations
     createPost: async (_: any, args: { input: any }) => {
       return await postController.create({ body: args.input } as any, {} as any);

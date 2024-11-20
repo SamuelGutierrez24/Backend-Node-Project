@@ -23,8 +23,8 @@ export const typeDefs = gql`
 
 type Mutation {
   createUser(input: UserInput!): User
-  loginUser(input: LoginInput!): AuthResponse
-  updateUser(email: String!, input: UserInput!): User
+  login(input: LoginInput!): AuthResponse
+  updateUser(email: String!, input: UserInput!): User!
   deleteUser(email: String!): User
   createPost(input: PostInput!): Post
   updatePost(id: ID!, input: PostInput!): Post
@@ -42,13 +42,14 @@ type User {
   id: ID!
   name: String!
   email: String!
+  role: String
 }
 
 input UserInput {
   name: String!
   email: String!
   password: String!
-  role: String!
+  role: String
 }
 
 type AuthResponse {

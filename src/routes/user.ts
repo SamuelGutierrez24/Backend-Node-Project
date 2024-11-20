@@ -19,7 +19,7 @@ router.get("/", auth, userController.getAll);
 
 router.get("/:id", auth, auth2("0"), userController.get);
 
-router.put("/:email", auth, auth2("0"), userController.update);
+//router.put("/:email", auth, auth2("0"), userController.update);
 
 router.delete("/", auth, auth2("0"), userController.delete);
 
