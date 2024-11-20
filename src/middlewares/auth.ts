@@ -1,11 +1,11 @@
-import {Request, Response, NextFunction} from "express";
-import jwt, {TokenExpiredError} from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
     let token = req.header("Authorization");
     token = token?.replace("Bearer ", "");
     if (!token) {
-        return res.status(401).json({message: "Unauthorized"});
+        return res.status(401).json({ message: "Unauthorized" });
     }
     try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
@@ -15,11 +15,20 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
         req.params.user_email = decoded.email;
         next();
     } catch (error) {
-        if (error instanceof TokenExpiredError){
-            return res.status(401).json({message: "Token expired"});
+        if (error instanceof TokenExpiredError) {
+            return res.status(401).json({ message: "Token expired" });
         }
-        res.status(401).json({message: "Unauthorized"});
+        res.status(401).json({ message: "Unauthorized" });
     }
-}
+};
+
+export const getUserFromToken = (token: string) => {
+    try {
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
+        return decoded;
+    } catch (error) {
+        return null;
+    }
+};
 
 export default auth;

@@ -9,6 +9,10 @@ class userController {
      */
     public async create(input: UserInput): Promise<UserDocument> {
         try {
+            const existingUser = await userService.findByEmail(input.email);
+            if (existingUser) {
+                throw new Error("User with this name already exists");
+            }
             const user: UserDocument = await userService.create(input);
             return user;
         } catch (error) {

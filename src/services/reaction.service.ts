@@ -68,7 +68,7 @@ class ReactionService {
                 throw new CommentNotExistsError("Reaction doesn’t exist");
             }
             if (reactionExists.email !== email) {
-                throw new UserNotAuthorizedError("Not your comment");
+                throw new UserNotAuthorizedError("Not your reaction");
             }
             await ReactionModel.deleteOne({ _id: id });
             await CommentModel.updateOne({_id:reactionExists.commentId}, { $pull: { reactions: id }})

@@ -1,15 +1,15 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-
-//import { router } from './routes/posts';
 import { router as user } from './routes/user';
 import { router as comment } from './routes/comment';
 import { router as reaction } from './routes/reaction';
 import { ApolloServer } from 'apollo-server';
-
+import { expressMiddleware as apolloMiddleware } from '@apollo/server/express4';
 import { db } from './config/db';
 import { typeDefs } from './graphql/schema';
 import { resolvers } from './graphql/resolvers';
+import jwt from 'jsonwebtoken';
+import { getUserFromToken } from './middlewares/auth';
 
 dotenv.config();
 
@@ -24,18 +24,22 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World');
 });
 
-//app.use('/api/posts', router);
 app.use('/api/users', user);
 app.use('/api/comments', comment);
 app.use('/api/reactions', reaction);
 
-const apolloServer  =  new ApolloServer({typeDefs, resolvers})
+const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({ req }) => {
+        const token = req.headers.authorization || '';
+        const user = getUserFromToken(token.replace("Bearer ", ""));
+        return { user };
+    },
+});
 
 db.then(() => {
-    /*app.listen(port, () => {
-        console.log(`Server is running  on port ${port}`);
-    });*/
     apolloServer.listen().then(({ url }) => {
         console.log(`Server ready at ${url}`);
-    })
-})
+    });
+});
