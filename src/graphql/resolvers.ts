@@ -74,8 +74,8 @@ export const resolvers = {
       return await reactionController.delete({ params: { id: args.id } } as any, {} as any);
     },
     // Comment mutations
-    createComment: async (_: any, args: { input: any }) => {
-      return await commentController.create({ body: args.input } as any, {} as any);
+    createComment: async (_: any, { email, text }: { email: string, text: string }) => {
+      return await commentController.create(email, text);
     },
     updateComment: async (_: any, { id, email, input }: { id: string, email: string, input: CommentInput }) => {
         return await commentController.update(id, email, input);

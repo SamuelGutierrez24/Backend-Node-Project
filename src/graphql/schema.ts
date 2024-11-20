@@ -29,8 +29,8 @@ type Mutation {
   createPost(input: PostInput!): Post
   updatePost(id: ID!, input: PostInput!): Post
   deletePost(id: ID!): Post
-  createComment(input: CommentInput!): Comment
-  updateComment(id: ID!, input: CommentInput!): Comment
+  createComment(email: String!, text: String!): Comment
+  updateComment(id: ID!, email: String, input: CommentInput!): Comment
   deleteComment(id: ID!, email: String): Comment
   respondToComment(id: ID!, input: CommentInput!): Comment
   createReaction(input: ReactionInput!): Reaction
