@@ -31,7 +31,7 @@ type Mutation {
   deletePost(id: ID!): Post
   createComment(input: CommentInput!): Comment
   updateComment(id: ID!, input: CommentInput!): Comment
-  deleteComment(id: ID!): Comment
+  deleteComment(id: ID!, email: String): Comment
   respondToComment(id: ID!, input: CommentInput!): Comment
   createReaction(input: ReactionInput!): Reaction
   updateReaction(id: ID!, input: ReactionInput!): Reaction
