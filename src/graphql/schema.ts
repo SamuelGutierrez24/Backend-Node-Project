@@ -32,7 +32,7 @@ type Mutation {
   createComment(email: String!, text: String!): Comment
   updateComment(id: ID!, email: String, input: CommentInput!): Comment
   deleteComment(id: ID!, email: String): Comment
-  respondToComment(id: ID!, input: CommentInput!): Comment
+  respondToComment(id: ID!, email: String, text: String!): Comment
   createReaction(input: ReactionInput!): Reaction
   updateReaction(id: ID!, input: ReactionInput!): Reaction
   deleteReaction(id: ID!): Reaction

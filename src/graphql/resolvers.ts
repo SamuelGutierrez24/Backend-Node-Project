@@ -1,5 +1,4 @@
 import userController from "../controllers/user.controller";
-import postController from "../controllers/post.controller";
 import reactionController from "../controllers/reaction.controller";
 import commentController from "../controllers/comment.controller";
 import { UserDocument, UserInput } from "../models/user.model";
@@ -16,13 +15,6 @@ export const resolvers = {
         //const controller = new UserController();
         return await userController.getAll();
       },
-    // Post queries
-    getPost: async (_: any, args: { id: string }) => {
-      return await postController.get({ params: { id: args.id } } as any, {} as any);
-    },
-    getPosts: async () => {
-      return await postController.getAll({} as any, {} as any);
-    },
     // Reaction queries
     getReaction: async (_: any, { id }: { id: string }) => {
         return await reactionController.get(id);
@@ -53,16 +45,6 @@ export const resolvers = {
     deleteUser: async (_: any, { email }: { email: string }) => {
             return await userController.delete(email);
         },
-    // Post mutations
-    createPost: async (_: any, args: { input: any }) => {
-      return await postController.create({ body: args.input } as any, {} as any);
-    },
-    updatePost: async (_: any, args: { id: string; input: any }) => {
-      return await postController.update({ params: { id: args.id }, body: args.input } as any, {} as any);
-    },
-    deletePost: async (_: any, args: { id: string }) => {
-      return await postController.delete({ params: { id: args.id } } as any, {} as any);
-    },
     // Reaction mutations
     createReaction: async (_: any, { input }: { input: ReactionInput }) => {
         return await reactionController.create(input);
