@@ -1,127 +1,93 @@
-import { Request, Response } from "express";
 import { UserDocument, UserInput } from "../models/user.model";
 import userService from "../services/user.service";
 import UserExistsError from "../exceptions/UserExistsError";
-import { Error } from "mongoose";
 
 class userController {
-
-    /** 
-    *Descripción: Crea un nuevo usuario en la base de datos.
-    *Método: POST
-    *URL: /api/users
-    */ 
-    public async create(req: Request, res: Response) {
+    /**
+     * Descripción: Crea un nuevo usuario en la base de datos.
+     * Método: POST
+     */
+    public async create(input: UserInput): Promise<UserDocument> {
         try {
-            const user: UserDocument = await userService.create(req.body as UserInput);
-            res.status(201).json(user);            
+            const user: UserDocument = await userService.create(input);
+            return user;
         } catch (error) {
-            if (error instanceof UserExistsError){
-                res.status(400).json({message: "User already exists" });
-                return;
+            if (error instanceof UserExistsError) {
+                throw new Error("User already exists");
             }
-            res.status(500).json(error);
+            throw new Error((error as Error).message);
         }
     }
 
     /**
-     * Descripción: Permite loguear a un usuario y crear su jwt token.
-     *Método: POST
-     *URL: /api/users
-     * @param req 
-     * @param res 
+     * Descripción: Permite loguear a un usuario y crear su JWT token.
      */
-    public async login(req: Request, res: Response) {
+    public async login(input: {name: string, email: string; password: string, role: string }): Promise<{ token: string }> {
         try {
-            const resObj = await userService.login(req.body);
-            res.status(200).json(resObj);
+            return await userService.login(input);
         } catch (error) {
-            if (error instanceof ReferenceError){
-                res.status(401).json({message: "Not authorized" });
-                return;
+            if (error instanceof ReferenceError) {
+                throw new Error("Not authorized");
             }
-            res.status(500).json(error);
+            throw new Error((error as Error).message);
         }
     }
-    /**
-     * Descripción: Nos devuelve un usuario a travez de su id.
-     *Método: GET
-     *URL: /api/users
-     * @param req 
-     * @param res 
-     */
-    public async get (req: Request, res: Response) {
-        try {
-            const user: UserDocument | null = await userService.findById(req.params.id); 
-            if (!user){
-                res.status(404).json({message: `User with id:${req.params.id} not found`});
-                return;
-            }
-            res.json(user);   
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    }
-    /**
-     * Descripción: Nos devuelve la lista completa de todos los usuarios en la base de datos.
-     *Método: GET
-     *URL: /api/users
-     * @param req 
-     * @param res 
-     */
 
-     public async getAll(): Promise<UserDocument[]> {
+    /**
+     * Descripción: Devuelve un usuario a través de su ID.
+     */
+    public async get(userId: string): Promise<UserDocument> {
         try {
-            const users: UserDocument[] = await userService.findAll(); // Obtiene la lista de usuarios
-            return users; // Retorna directamente los datos
+            const user: UserDocument | null = await userService.findById(userId);
+            if (!user) {
+                throw new Error(`User with ID: ${userId} not found`);
+            }
+            return user;
         } catch (error) {
-            throw new Error((error as Error).message); // Especificamos que el error es del tipo Error
+            throw new Error((error as Error).message);
         }
     }
-    
-    
+
+    /**
+     * Descripción: Devuelve la lista completa de usuarios.
+     */
+    public async getAll(): Promise<UserDocument[]> {
+        try {
+            return await userService.findAll();
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+    }
 
     /**
      * Descripción: Edita un usuario ya creado.
-     *Método: PUT
-     *URL: /api/users
-     * @param req 
-     * @param res 
      */
-    public async update(req: Request, res: Response) {
+    public async update(email: string, input: UserInput): Promise<UserDocument> {
         try {
-            const user: UserDocument | null = await userService.update(req.params.email, req.body as UserInput);
+            const user: UserDocument | null = await userService.update(email, input);
             if (!user) {
-                res.status(404).json({ message: `User with email: ${req.params.email} not found` });
-                return;
+                throw new Error(`User with email: ${email} not found`);
             }
-            res.json(user);
+            return user;
         } catch (error) {
-            res.status(500).json(error);
+            throw new Error((error as Error).message);
         }
     }
-    
+
     /**
      * Descripción: Elimina un usuario de la base de datos.
-     *Método: DELETE
-     *URL: /api/users
-     * @param req 
-     * @param res 
      */
-    public async delete(req: Request, res: Response) {
+    public async delete(email: string): Promise<UserDocument> {
         try {
-            const user: UserDocument | null = await userService.delete(req.body.email);
+            const user: UserDocument | null = await userService.delete(email);
             if (!user) {
-                res.status(404).json({ message: `User with email: ${req.body.email} not found` });
-                return;
+                throw new Error(`User with email: ${email} not found`);
             }
-            res.json(user);
+            return user;
         } catch (error) {
-            res.status(500).json(error);
+            throw new Error((error as Error).message);
         }
     }
-    
-    
 }
 
 export default new userController();

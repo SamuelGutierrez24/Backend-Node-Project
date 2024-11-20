@@ -48,6 +48,7 @@ input UserInput {
   name: String!
   email: String!
   password: String!
+  role: String!
 }
 
 type AuthResponse {

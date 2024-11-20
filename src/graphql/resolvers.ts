@@ -2,12 +2,13 @@ import userController from "../controllers/user.controller";
 import postController from "../controllers/post.controller";
 import reactionController from "../controllers/reaction.controller";
 import commentController from "../controllers/comment.controller";
+import { UserInput } from "../models/user.model";
 
 export const resolvers = {
   Query: {
     // User queries
-    getUser: async (_: any, args: { id: string }) => {
-      return await userController.get({ params: { id: args.id } } as any, {} as any);
+    getUser: async (_: any, { id }: { id: string }) => {
+        return await userController.get(id);
     },
     getAllUsers: async () => {
         //const controller = new UserController();
@@ -37,17 +38,17 @@ export const resolvers = {
   },
   Mutation: {
     // User mutations
-    createUser: async (_: any, args: { input: any }) => {
-      return await userController.create({ body: args.input } as any, {} as any);
+    createUser: async (_: any, { input }: { input: UserInput }) => {
+        return await userController.create(input);
     },
-    loginUser: async (_: any, args: { input: any }) => {
-      return await userController.login({ body: args.input } as any, {} as any);
+    login: async (_: any, { input }: { input: { name: string; email: string; password: string; role: string } }) => {
+        return await userController.login(input);
     },
     updateUser: async (_: any, args: { email: string; input: any }) => {
       return await userController.update({ params: { email: args.email }, body: args.input } as any, {} as any);
     },
-    deleteUser: async (_: any, args: { email: string }) => {
-      return await userController.delete({ body: { email: args.email } } as any, {} as any);
+    deleteUser: async (_: any, { email }: { email: string }) => {
+        return await userController.delete(email);
     },
     // Post mutations
     createPost: async (_: any, args: { input: any }) => {
