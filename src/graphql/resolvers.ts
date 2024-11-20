@@ -3,6 +3,7 @@ import postController from "../controllers/post.controller";
 import reactionController from "../controllers/reaction.controller";
 import commentController from "../controllers/comment.controller";
 import { UserDocument, UserInput } from "../models/user.model";
+import { CommentInput } from "../models/comment.model";
 
 export const resolvers = {
   Query: {
@@ -29,12 +30,13 @@ export const resolvers = {
       return await reactionController.getAll({} as any, {} as any);
     },
     // Comment queries
-    getComment: async (_: any, args: { id: string }) => {
-      return await commentController.get({ params: { id: args.id } } as any, {} as any);
+    getComment: async (_: any, { id }: { id: string }) => {
+        return await commentController.get(id);
     },
     getComments: async () => {
-      return await commentController.getAll({} as any, {} as any);
+        return await commentController.getAll();
     },
+  
   },
   Mutation: {
     // User mutations
@@ -74,14 +76,14 @@ export const resolvers = {
     createComment: async (_: any, args: { input: any }) => {
       return await commentController.create({ body: args.input } as any, {} as any);
     },
-    updateComment: async (_: any, args: { id: string; input: any }) => {
-      return await commentController.update({ params: { id: args.id }, body: args.input } as any, {} as any);
+    updateComment: async (_: any, { id, email, input }: { id: string, email: string, input: CommentInput }) => {
+        return await commentController.update(id, email, input);
     },
-    deleteComment: async (_: any, args: { id: string }) => {
-      return await commentController.delete({ params: { id: args.id } } as any, {} as any);
+    deleteComment: async (_: any, { id, email }: { id: string, email: string }) => {
+        return await commentController.delete(id, email);
     },
-    respondToComment: async (_: any, args: { id: string; input: any }) => {
-      return await commentController.response({ params: { id: args.id }, body: args.input } as any, {} as any);
-    },
+    respondToComment: async (_: any, { id, email, text }: { id: string, email: string, text: string }) => {
+        return await commentController.response(id, email, text);
+    }
   },
 };

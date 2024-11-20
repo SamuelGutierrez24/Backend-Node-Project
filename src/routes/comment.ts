@@ -11,16 +11,16 @@ import auth3 from "../middlewares/auth.comment";
 export const router = express.Router();
 
 
-router.post("/",auth, auth3, validateSchema(commentSchema), commentController.create);
+//router.post("/",auth, auth3, validateSchema(commentSchema), commentController.create);
 
 router.get("/", auth, commentController.getAll);
 
 router.get("/:id", auth, auth3, commentController.get);
 
-router.put("/:id", auth, auth3, commentController.update);
+//router.put("/:id", auth, auth3, commentController.update);
 
-router.delete("/:id", auth, auth3, commentController.delete);
+//router.delete("/:id", auth, auth3, commentController.delete);
 
-router.post("/:id", auth, commentController.response);
+//router.post("/:id", auth, commentController.response);
 
 

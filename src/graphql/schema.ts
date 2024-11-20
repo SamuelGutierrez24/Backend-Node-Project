@@ -80,6 +80,8 @@ input CommentInput {
   text: String!
   email: String!
   commentId: String
+  responses: [String]
+  reactions: [String]
 }
 
 type Reaction {

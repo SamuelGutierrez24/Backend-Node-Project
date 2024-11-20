@@ -1,133 +1,82 @@
-import { Request, Response } from "express";
 import { CommentDocument, CommentInput } from "../models/comment.model";
 import commentService from "../services/comment.service";
-import UserExistsError from "../exceptions/UserExistsError";
 
 class commentController {
 
-    /**
-     * Descripción: Metodo para crear comentario.
-     *Método: POST
-     *URL: /api/comments
-     * @param req 
-     * @param res 
-     */
-    public async create(req: Request, res: Response) {
+    // Crear un comentario
+    public async create(email: string, text: string): Promise<CommentDocument> {
         try {
-            const email = req.params.email;
-            const text = req.body.text;
-            const commentInput: CommentInput = {text:text , email:email, commentId: "", responses:[], reactions:[]};
+            const commentInput: CommentInput = { text: text, email: email, commentId: "", responses: [], reactions: [] };
             const comment: CommentDocument = await commentService.create(commentInput);
-            res.status(201).json(comment);            
+            return comment;
         } catch (error) {
-            res.status(500).json(error);
-        }
-    }
-    /**
-     * Descripción: Metodo para encontrar un usuario por su id.
-     *Método: GET
-     *URL: /api/comments
-     * @param req 
-     * @param res 
-     */
-    public async get (req: Request, res: Response) {
-        try {
-            const comment: CommentDocument | null = await commentService.findById(req.params.id); 
-            if (!comment){
-                res.status(404).json({message: `comment with id:${req.params.id} not found`});
-                return;
-            }
-            res.json(comment);   
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    }
-    /**
-     * Descripción: Metodo para encontrar todos los usuarios.
-     *Método: GET
-     *URL: /api/comments
-     * @param req 
-     * @param res 
-     */
-    public async getAll(req: Request, res: Response) {
-        try {
-            const comments: CommentDocument[] = await commentService.findAll(); 
-            res.json(comments);            
-        } catch (error) {
-            res.status(500).json(error);
-        }    
-    }
-    /**
-     * Descripción: Metodo para actualizar los datos de un usuario.
-     *Método: PUT
-     *URL: /api/comments
-     * @param req 
-     * @param res 
-     */
-    public async update(req: Request, res: Response) {
-        try {
-            const comment: CommentDocument | null = await commentService.update(req.params.id, req.body as CommentInput, req.params.email);
-            if (!comment) {
-                res.status(404).json({ message: `User with email: ${req.params.email} not found` });
-                return;
-            }
-            res.json(comment);
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    }
-    
-    /**
-     * Descripción: Metodo para borrar un usuario
-     *Método: DELETE
-     *URL: /api/comments
-     * @param req 
-     * @param res 
-     */
-    public async delete(req: Request, res: Response) {
-        try {
-            const comment: CommentDocument | null = await commentService.delete(req.params.id, req.params.email);
-            if (!comment) {
-                res.status(404).json({ message: `Comment with id: ${req.params.id} not found` });
-                return;
-            }
-            res.json(comment);
-        } catch (error) {
-            res.status(500).json(error);
+            throw new Error((error as Error).message);
         }
     }
 
-    /**
-     * Descripción: Metodo en el cual se realiza una respuesta a un comentario, 
-     * se crea un nuevo comentario y se referencia su id con el id del comentario base.
-     *Método: POST
-     *URL: /api/comments
-     * @param req 
-     * @param res 
-     */
-    public async response(req: Request, res: Response) {
+    // Obtener un comentario por ID
+    public async get(id: string): Promise<CommentDocument | null> {
         try {
-            const email = req.params.email;
-            const text = req.body.text;
-            const id = req.params.id;
-            const commentInput: CommentInput = { text: text, email: email, commentId:id, responses: [], reactions:[] };
-            const comment: CommentDocument | null = await commentService.response(commentInput, id);
-            
+            const comment: CommentDocument | null = await commentService.findById(id);
             if (!comment) {
-                res.status(404).json({ message: `Comment with id: ${id} not found` });
-                return;
+                throw new Error(`Comment with id:${id} not found`);
             }
-            
-            res.status(201).json(comment);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                res.status(500).json({ error: error.message });
-            } else {
-                res.status(500).json({ error: "An unknown error occurred" });
-            }
+            return comment;
+        } catch (error) {
+            throw new Error((error as Error).message);
         }
     }
-    
+
+    // Obtener todos los comentarios
+    public async getAll(): Promise<CommentDocument[]> {
+        try {
+            const comments: CommentDocument[] = await commentService.findAll();
+            return comments;
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+    }
+
+    // Actualizar un comentario
+    public async update(id: string, email: string, input: CommentInput): Promise<CommentDocument | null> {
+        try {
+            const comment: CommentDocument | null = await commentService.update(id, input, email);
+            if (!comment) {
+                throw new Error(`Comment with id: ${id} not found`);
+            }
+            return comment;
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+    }
+
+    // Eliminar un comentario
+    public async delete(id: string, email: string): Promise<CommentDocument | null> {
+        try {
+            const comment: CommentDocument | null = await commentService.delete(id, email);
+            if (!comment) {
+                throw new Error(`Comment with id: ${id} not found`);
+            }
+            return comment;
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+    }
+
+    // Responder a un comentario
+    public async response(id: string, email: string, text: string): Promise<CommentDocument> {
+        try {
+            const commentInput: CommentInput = { text: text, email: email, commentId: id, responses: [], reactions: [] };
+            const comment: CommentDocument | null = await commentService.response(commentInput, id);
+            if (!comment) {
+                throw new Error(`Comment with id: ${id} not found`);
+            }
+            return comment;
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+    }
+
 }
 
 export default new commentController();
