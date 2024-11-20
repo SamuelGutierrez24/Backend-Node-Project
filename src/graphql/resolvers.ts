@@ -10,8 +10,9 @@ export const resolvers = {
       return await userController.get({ params: { id: args.id } } as any, {} as any);
     },
     getAllUsers: async () => {
-      return await userController.getAll({} as any, {} as any);
-    },
+        //const controller = new UserController();
+        return await userController.getAll();
+      },
     // Post queries
     getPost: async (_: any, args: { id: string }) => {
       return await postController.get({ params: { id: args.id } } as any, {} as any);

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserDocument, UserInput } from "../models/user.model";
 import userService from "../services/user.service";
 import UserExistsError from "../exceptions/UserExistsError";
+import { Error } from "mongoose";
 
 class userController {
 
@@ -69,14 +70,16 @@ class userController {
      * @param res 
      */
 
-    public async getAll(req: Request, res: Response) {
+     public async getAll(): Promise<UserDocument[]> {
         try {
-            const users: UserDocument[] = await userService.findAll(); 
-            res.json(users);            
+            const users: UserDocument[] = await userService.findAll(); // Obtiene la lista de usuarios
+            return users; // Retorna directamente los datos
         } catch (error) {
-            res.status(500).json(error);
-        }    
+            throw new Error((error as Error).message); // Especificamos que el error es del tipo Error
+        }
     }
+    
+    
 
     /**
      * Descripción: Edita un usuario ya creado.

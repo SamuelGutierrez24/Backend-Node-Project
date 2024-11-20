@@ -12,7 +12,7 @@ export const typeDefs = gql`
   }
   type Query {
   getUser(id: ID!): User
-  getAllUsers: [User!]
+  getAllUsers: [User!]!
   getPost(id: ID!): Post
   getPosts: [Post!]
   getComment(id: ID!): Comment
