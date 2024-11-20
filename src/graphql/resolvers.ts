@@ -4,6 +4,7 @@ import reactionController from "../controllers/reaction.controller";
 import commentController from "../controllers/comment.controller";
 import { UserDocument, UserInput } from "../models/user.model";
 import { CommentInput } from "../models/comment.model";
+import { ReactionInput } from "../models/reaction.model";
 
 export const resolvers = {
   Query: {
@@ -23,11 +24,11 @@ export const resolvers = {
       return await postController.getAll({} as any, {} as any);
     },
     // Reaction queries
-    getReaction: async (_: any, args: { id: string }) => {
-      return await reactionController.get({ params: { id: args.id } } as any, {} as any);
+    getReaction: async (_: any, { id }: { id: string }) => {
+        return await reactionController.get(id);
     },
     getReactions: async () => {
-      return await reactionController.getAll({} as any, {} as any);
+        return await reactionController.getAll();
     },
     // Comment queries
     getComment: async (_: any, { id }: { id: string }) => {
@@ -63,11 +64,11 @@ export const resolvers = {
       return await postController.delete({ params: { id: args.id } } as any, {} as any);
     },
     // Reaction mutations
-    createReaction: async (_: any, args: { input: any }) => {
-      return await reactionController.create({ body: args.input } as any, {} as any);
+    createReaction: async (_: any, { input }: { input: ReactionInput }) => {
+        return await reactionController.create(input);
     },
-    updateReaction: async (_: any, args: { id: string; input: any }) => {
-      return await reactionController.update({ params: { id: args.id }, body: args.input } as any, {} as any);
+    updateReaction: async (_: any, { id, input }: { id: string; input: ReactionInput }) => {
+        return await reactionController.update(id, input);
     },
     deleteReaction: async (_: any, args: { id: string }) => {
       return await reactionController.delete({ params: { id: args.id } } as any, {} as any);

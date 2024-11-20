@@ -16,7 +16,7 @@ router.get("/", auth, reactionController.getAll);
 
 router.get("/:id", auth, auth3, reactionController.get);
 
-router.put("/:id", auth, auth3, reactionController.update);
+//router.put("/:id", auth, auth3, reactionController.update);
 
-router.delete("/:id", auth, auth3, reactionController.delete);
+//router.delete("/:id", auth, auth3, reactionController.delete);
 
